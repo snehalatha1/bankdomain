@@ -14,35 +14,35 @@ environment {
   stages {
      stage('checkout'){
        steps {
-          git 'https://github.com/prafullashilimkar/star-agile-banking-finance.git'
-                    }
-            }
+          git branch: 'main', url: 'https://github.com/snehalatha1/bankdomain.git'
+       }
+     }
    
 
-     stage('Build the  Application'){
-               steps {
-                   echo "Cleaning.... Compiling......Testing.........Packaging"
-                   sh 'mvn clean package'
-                    }
-                 }
+     stage('Package'){
+        steps {
+            
+            sh 'mvn clean package'
+        }    
+     }  
      stage('publish Reports'){
                steps {
-               publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '/var/lib/jenkins/workspace/Bankingproject/target/surefire-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])    
+               publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '/var/lib/jenkins/workspace/project2/target/surefire-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])    
                     }
             }
 
      stage('Docker Image Creation'){
-               steps {
-                      sh 'docker build -t prafullla/bankingapp:latest  .'
+          steps {
+                 sh 'docker build -t snehalatha15/bankingapp:latest  .'
                       }
                    }
 
 
       stage('Push Image to DockerHub'){
                steps {
-                   withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-        	   sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-                   sh 'docker push prafullla/bankingapp:latest'
+                   withCredentials([usernamePassword(credentialsId: 'dh', passwordVariable: 'dhpswd', usernameVariable: 'dhuser')]) {
+        	   sh "docker login -u ${env.dhuser} -p ${env.dhpswd}"
+                   sh 'docker push snehalatha15/bankingapp:latest'
 
 	            }
                  }
@@ -87,7 +87,7 @@ environment {
      stage ('Configure Test-server with Terraform, Ansible and then Deploying'){
             steps {
                 dir('test-server'){
-                sh 'sudo chmod 600 jenkinskey1.pem'
+                sh 'sudo chmod 600 newkeypair.pem'
                 sh 'terraform init'
                 sh 'terraform validate'
                 sh 'terraform apply --auto-approve'
