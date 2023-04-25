@@ -50,10 +50,12 @@ environment {
 	     
      stage ('Configure Test-server with Terraform, Ansible and then Deploying'){
             steps {
+                dir('test'){
                 sh 'sudo chmod 600 ./newkeypair.pem'
                 sh 'terraform init'
                 sh 'terraform validate'
                 sh 'terraform apply --auto-approve'
+                }
                 }
             }
         }
