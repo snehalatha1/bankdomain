@@ -3,7 +3,7 @@ pipeline {
 
   tools {
       maven 'M2_HOME'
-      terraform 'terraform-11'
+      terraform 'TERRAFORM_HOME'
         }
 environment {
         AWS_ACCESS_KEY = '${ACCESS_KEY}'
